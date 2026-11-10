@@ -1,4 +1,4 @@
-const CACHE_VERSION = "lanbai-cuoti-v1";
+const CACHE_VERSION = "lanbai-cuoti-v3";
 
 const APP_SHELL = [
   "./",
