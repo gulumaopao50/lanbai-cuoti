@@ -201,7 +201,7 @@ function showInstallGuideModal() {
   const browser = detectBrowser();
   const guide = INSTALL_STEPS[browser.id] || INSTALL_STEPS.unknown;
   const stepsHtml = guide.steps
-    .map((step, index) => `<li><span class="step-num">${index + 1}</span><span>${esc(step)}</span></li>`)
+    .map((step, index) => `<li><span class="step-num">${index + 1}</span><span>${esc(step).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>")}</span></li>`)
     .join("");
 
   openModal({
