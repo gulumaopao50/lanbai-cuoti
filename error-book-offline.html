@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2563EB">
+<title>蓝白错题本 · 离线版</title>
+<style>
+:root{--blue:#2563EB;--blue-strong:#1E6BFF;--blue-soft:#EAF1FF;--blue-line:#D7E3FF;--bg:#F5F8FF;--card:#fff;--text:#0F172A;--text-2:#334155;--muted:#64748B;--line:#E2E8F0;--ok:#16A34A;--ok-soft:#E8F7EE;--warn:#EA580C;--warn-soft:#FFF1E8;--danger:#DC2626;--danger-soft:#FEECEC;--radius:14px;--radius-lg:20px;--shadow:0 1px 2px rgba(15,23,42,.04),0 8px 24px rgba(37,99,235,.06);--shadow-lg:0 24px 60px rgba(15,23,42,.18);--font:system-ui,-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,p{margin:0}
+button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;border:none;background:none}
+img{display:block;max-width:100%}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.hidden{display:none!important}
+.app{display:flex;min-height:100dvh}
+.sidebar{width:236px;flex:0 0 236px;height:100dvh;position:sticky;top:0;display:flex;flex-direction:column;gap:18px;padding:24px 16px;background:#fff;border-right:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;padding:0 8px}
+.brand-mark{width:42px;height:42px;border-radius:13px;background:linear-gradient(160deg,var(--blue),var(--blue-strong));color:#fff;display:grid;place-items:center;font-weight:700;font-size:19px;box-shadow:0 8px 18px rgba(37,99,235,.28)}
+.brand-text{display:flex;flex-direction:column;line-height:1.2}
+.brand-text strong{font-size:15px}
+.brand-text small{color:var(--muted);font-size:11px;margin-top:3px}
+.nav{display:flex;flex-direction:column;gap:4px;margin-top:6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;color:var(--text-2);font-size:14px;font-weight:500;transition:.15s}
+.nav-item svg{width:18px;height:18px;flex:0 0 auto}
+.nav-item:hover{background:var(--blue-soft);color:var(--blue)}
+.nav-item.active{background:var(--blue);color:#fff;box-shadow:0 8px 18px rgba(37,99,235,.24)}
+.sidebar-foot{margin-top:auto;font-size:11px;color:var(--muted);padding:0 10px;line-height:1.7}
+.main{flex:1;min-width:0;padding:28px 32px 56px}
+.view{max-width:1080px;margin:0 auto;animation:vin .24s ease both}
+@keyframes vin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.tabbar{display:none}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:22px;flex-wrap:wrap}
+.page-title{font-size:24px;font-weight:700;letter-spacing:-.3px}
+.page-sub{color:var(--muted);font-size:13px;margin-top:6px}
+.page-actions{display:flex;gap:8px;flex-wrap:wrap}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-lg);box-shadow:var(--shadow)}
+.card-pad{padding:20px}
+.card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line)}
+.card-title{font-size:15px;font-weight:650;display:flex;align-items:center;gap:8px}
+.card-title svg{width:17px;height:17px;color:var(--blue)}
+.card-body{padding:8px 12px 12px}
+.card-link{font-size:12px;color:var(--blue);font-weight:500}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:40px;padding:0 16px;border-radius:10px;font-size:14px;font-weight:550;transition:.15s;white-space:nowrap;border:1px solid transparent}
+.btn:active{transform:translateY(1px)}
+.btn svg{width:16px;height:16px}
+.btn-primary{background:var(--blue);color:#fff;box-shadow:0 8px 18px rgba(37,99,235,.24)}
+.btn-primary:hover{background:var(--blue-strong)}
+.btn-soft{background:var(--blue-soft);color:var(--blue)}
+.btn-soft:hover{background:var(--blue-line)}
+.btn-ghost{background:#fff;border-color:var(--line);color:var(--text-2)}
+.btn-ghost:hover{border-color:var(--blue-line);color:var(--blue)}
+.btn-danger{background:var(--danger-soft);color:var(--danger)}
+.btn-sm{height:32px;padding:0 12px;font-size:12px;border-radius:8px}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.btn-icon{width:32px;height:32px;display:inline-grid;place-items:center;border-radius:8px;color:var(--muted);transition:.15s}
+.btn-icon:hover{background:var(--danger-soft);color:var(--danger)}
+.btn-icon.act:hover{background:var(--blue-soft);color:var(--blue)}
+.btn-icon svg{width:16px;height:16px}
+.grid{display:grid;gap:16px}
+.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.stack{display:flex;flex-direction:column;gap:14px}
+.row{display:flex;align-items:center;gap:10px}
+.row-between{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.wrap{flex-wrap:wrap}
+.stat{padding:18px 20px;display:flex;flex-direction:column;gap:6px}
+.stat-top{display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:12px}
+.stat-icon{width:30px;height:30px;border-radius:9px;background:var(--blue-soft);color:var(--blue);display:grid;place-items:center}
+.stat-icon svg{width:16px;height:16px}
+.stat-num{font-size:26px;font-weight:700;line-height:1.1}
+.stat-num small{font-size:13px;font-weight:500;color:var(--muted)}
+.stat-note{font-size:12px;color:var(--muted)}
+.badge{display:inline-flex;align-items:center;gap:4px;height:22px;padding:0 8px;border-radius:999px;font-size:11px;font-weight:600;background:#F1F5F9;color:var(--muted);white-space:nowrap}
+.badge-blue{background:var(--blue-soft);color:var(--blue)}
+.badge-ok{background:var(--ok-soft);color:var(--ok)}
+.badge-warn{background:var(--warn-soft);color:var(--warn)}
+.badge-gray{background:#F1F5F9;color:var(--muted)}
+.chip{display:inline-flex;align-items:center;height:28px;padding:0 12px;border-radius:999px;background:#fff;border:1px solid var(--line);color:var(--text-2);font-size:12px;font-weight:500;transition:.15s}
+.chip:hover{border-color:var(--blue-line);color:var(--blue)}
+.chip.active{background:var(--blue);border-color:var(--blue);color:#fff}
+.chip-x{margin-left:6px;color:inherit;opacity:.55;font-size:13px;line-height:1;padding:0 1px}
+.chip-x:hover{opacity:1}
+.field{display:flex;flex-direction:column;gap:6px}
+.field-label{font-size:12px;font-weight:600;color:var(--text-2)}
+.field-label .req{color:var(--danger)}
+.field-hint{font-size:11px;color:var(--muted)}
+.input,.select,.textarea{width:100%;border:1px solid var(--line);background:#fff;border-radius:10px;padding:0 12px;height:40px;font-size:14px;transition:.15s}
+.textarea{height:auto;min-height:84px;padding:10px 12px;resize:vertical;line-height:1.6}
+.input:focus,.select:focus,.textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
+.input::placeholder,.textarea::placeholder{color:#94A3B8}
+.select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:32px}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.form-grid .span-2{grid-column:span 2}
+.toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.search{position:relative;flex:1;min-width:180px}
+.search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--muted)}
+.search .input{padding-left:34px}
+.select-sm{height:36px;width:auto;min-width:108px;font-size:13px}
+.list{display:flex;flex-direction:column}
+.list-item{display:flex;align-items:flex-start;gap:12px;padding:12px 10px;border-radius:10px;transition:.15s}
+.list-item+.list-item{border-top:1px dashed var(--line)}
+.list-item:hover{background:#FAFCFF}
+.li-main{flex:1;min-width:0}
+.li-title{font-size:14px;font-weight:550;word-break:break-word}
+.list-item.done .li-title{color:var(--muted);text-decoration:line-through}
+.li-meta{display:flex;align-items:center;gap:8px;margin-top:5px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+.li-meta svg{width:13px;height:13px;vertical-align:-2px}
+.check{width:22px;height:22px;flex:0 0 auto;margin-top:1px;border-radius:7px;border:1.5px solid #CBD5E1;background:#fff;display:grid;place-items:center;color:transparent;transition:.15s}
+.check svg{width:13px;height:13px}
+.check:hover{border-color:var(--blue)}
+.check.done{background:var(--blue);border-color:var(--blue);color:#fff}
+.mistake-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.mistake-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;gap:10px;cursor:pointer;transition:.15s;text-align:left}
+.mistake-card:hover{border-color:var(--blue-line);box-shadow:0 10px 26px rgba(37,99,235,.1);transform:translateY(-1px)}
+.mc-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.mc-question{font-size:14px;font-weight:550;line-height:1.55;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
+.mc-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:auto;padding-top:4px;font-size:11px;color:var(--muted)}
+.thumb{position:relative;width:64px;height:64px;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:#F8FAFC}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.thumb-del{position:absolute;top:2px;right:2px;width:18px;height:18px;border-radius:6px;background:rgba(15,23,42,.65);color:#fff;display:grid;place-items:center;font-size:11px;line-height:1}
+.upload{display:flex;align-items:center;justify-content:center;gap:10px;min-height:96px;border:1.5px dashed var(--blue-line);background:#F8FBFF;border-radius:12px;color:var(--muted);font-size:13px;padding:14px;cursor:pointer;transition:.15s;text-align:center}
+.upload:hover,.upload.drag{border-color:var(--blue);background:var(--blue-soft);color:var(--blue)}
+.thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.ocr-row{display:flex;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap}
+.ocr-status{font-size:12px;color:var(--blue)}
+.ocr-status.warn{color:var(--warn)}
+.empty{display:flex;flex-direction:column;align-items:center;gap:8px;padding:40px 16px;text-align:center;color:var(--muted)}
+.empty-icon{width:48px;height:48px;border-radius:14px;background:var(--blue-soft);color:var(--blue);display:grid;place-items:center}
+.empty-icon svg{width:24px;height:24px}
+.empty-title{font-size:14px;font-weight:600;color:var(--text-2)}
+.empty-desc{font-size:12px;max-width:280px;line-height:1.7}
+.segmented{display:inline-flex;padding:3px;background:#EEF3FB;border-radius:10px;gap:2px}
+.seg{height:30px;padding:0 14px;border-radius:8px;font-size:13px;font-weight:500;color:var(--muted);transition:.15s}
+.seg.active{background:#fff;color:var(--blue);box-shadow:0 1px 4px rgba(15,23,42,.08)}
+.modal-backdrop{position:fixed;inset:0;z-index:60;background:rgba(15,23,42,.42);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;padding:18px;opacity:0;transition:opacity .18s}
+.modal-backdrop.open{opacity:1}
+.modal{width:100%;max-width:480px;max-height:min(86dvh,860px);background:#fff;border-radius:18px;box-shadow:var(--shadow-lg);display:flex;flex-direction:column;overflow:hidden;transform:translateY(12px) scale(.98);transition:transform .18s}
+.modal-backdrop.open .modal{transform:none}
+.modal.wide{max-width:680px}
+.modal-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 20px 14px;border-bottom:1px solid var(--line)}
+.modal-title{font-size:16px;font-weight:650}
+.modal-body{padding:18px 20px;overflow-y:auto}
+.modal-foot{display:flex;justify-content:flex-end;gap:10px;padding:14px 20px;border-top:1px solid var(--line);background:#FCFDFF}
+#toast-root{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);z-index:80;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;width:max-content;max-width:calc(100vw - 32px)}
+.toast{background:#0F172A;color:#fff;font-size:13px;padding:10px 16px;border-radius:10px;box-shadow:0 12px 28px rgba(15,23,42,.24);opacity:0;transform:translateY(8px);transition:.2s;max-width:100%}
+.toast.show{opacity:1;transform:none}
+.toast-success{background:#12813F}
+.toast-warn{background:#B4470A}
+.toast-error{background:#B91C1C}
+.ring-wrap{position:relative;width:240px;height:240px;margin:0 auto}
+.ring{width:100%;height:100%;border-radius:50%;background:conic-gradient(var(--blue) 0deg,var(--blue-soft) 0deg);display:grid;place-items:center;transition:background .2s linear}
+.ring-inner{width:202px;height:202px;border-radius:50%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;box-shadow:inset 0 0 0 1px var(--line)}
+.timer-display{font-size:40px;font-weight:700;letter-spacing:-1px;font-variant-numeric:tabular-nums}
+.timer-label{font-size:12px;color:var(--muted)}
+.focus-presets{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.settings-block{padding:18px 20px}
+.settings-block+.settings-block{border-top:1px solid var(--line)}
+.settings-title{font-size:14px;font-weight:650;margin-bottom:4px}
+.settings-desc{font-size:12px;color:var(--muted);line-height:1.7}
+.settings-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:10px 0;flex-wrap:wrap}
+.stat-line{display:flex;gap:18px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+.tag{display:inline-flex;align-items:center;height:20px;padding:0 7px;border-radius:6px;background:#F1F5F9;color:var(--muted);font-size:11px}
+.detail-block{border:1px solid var(--line);border-radius:12px;padding:14px;background:#FCFDFF}
+.detail-label{font-size:11px;font-weight:600;color:var(--blue);margin-bottom:6px}
+.detail-text{font-size:13.5px;line-height:1.75;white-space:pre-wrap;word-break:break-word;color:var(--text-2)}
+.detail-imgs{display:flex;gap:8px;flex-wrap:wrap}
+.detail-imgs img{width:100%;max-width:220px;border-radius:10px;border:1px solid var(--line)}
+.quick{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.quick-item{display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid var(--line);border-radius:var(--radius);transition:.15s}
+.quick-item:hover{border-color:var(--blue-line);box-shadow:var(--shadow);transform:translateY(-1px)}
+.quick-icon{width:36px;height:36px;border-radius:10px;background:var(--blue-soft);color:var(--blue);display:grid;place-items:center;flex:0 0 auto}
+.quick-icon svg{width:18px;height:18px}
+.quick-title{display:block;font-size:13px;font-weight:600}
+.quick-desc{display:block;font-size:11px;color:var(--muted);margin-top:2px}
+.note{background:var(--blue-soft);border:1px solid var(--blue-line);border-radius:12px;padding:12px 14px;font-size:12px;color:var(--text-2);line-height:1.7}
+@media (max-width:880px){.sidebar{display:none}.main{padding:18px 16px calc(88px + env(safe-area-inset-bottom))}.tabbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:40;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom))}.tab-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 2px;border-radius:10px;color:var(--muted);font-size:10px}.tab-item svg{width:20px;height:20px}.tab-item.active{color:var(--blue)}.page-title{font-size:20px}.grid-2,.grid-3{grid-template-columns:repeat(2,minmax(0,1fr))}.quick{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.form-grid .span-2{grid-column:span 1}.ring-wrap{width:208px;height:208px}.ring-inner{width:174px;height:174px}.timer-display{font-size:34px}#toast-root{bottom:calc(84px + env(safe-area-inset-bottom))}}
+@media (max-width:520px){.grid-3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-mark">错</span>
+      <span class="brand-text"><strong>蓝白错题本</strong><small>离线版 · 数据存本机</small></span>
+    </div>
+    <nav class="nav" id="nav" aria-label="主导航"></nav>
+    <div class="sidebar-foot">所有数据保存在本机浏览器<br>可在设置中导出备份</div>
+  </aside>
+  <main class="main"><div id="view" class="view" aria-live="polite"></div></main>
+  <nav class="tabbar" id="tabbar" aria-label="主导航"></nav>
+</div>
+<div id="modal-root"></div>
+<div id="toast-root" aria-live="assertive"></div>
+<script>
+(function () {
+  "use strict";
+
+  var LS_KEY = "lanbai-cuoti.offline.v1";
+  var BASE_SUBJECTS = ["语文", "数学", "英语", "物理", "化学", "生物", "历史", "地理", "政治", "其他"];
+  var STATUS_LABELS = { todo: "待复习", reviewing: "复习中", mastered: "已掌握" };
+  var STATUS_CLASS = { todo: "badge-gray", reviewing: "badge-blue", mastered: "badge-ok" };
+  var REASONS = ["概念不清", "计算失误", "审题错误", "时间不足", "其他"];
+  var DIFFS = [{ v: 1, l: "简单" }, { v: 2, l: "较易" }, { v: 3, l: "中等" }, { v: 4, l: "较难" }, { v: 5, l: "困难" }];
+  var INTERVALS = [1, 3, 7, 15];
+  var PRIORITIES = [
+    { v: "high", l: "高优先级", c: "badge-warn" },
+    { v: "normal", l: "普通", c: "badge-blue" },
+    { v: "low", l: "低优先级", c: "badge-gray" }
+  ];
+
+  var ICONS = {
+    home: '<path d="M3 10.8 12 3.5l9 7.3"/><path d="M5.2 9.6V20.5h13.6V9.6"/><path d="M9.5 20.5v-6h5v6"/>',
+    book: '<path d="M4.5 5.4A2.4 2.4 0 0 1 6.9 3H19.5v18H6.9a2.4 2.4 0 0 1-2.4-2.4z"/><path d="M8 7.5h7.5M8 11h5.5"/>',
+    calendar: '<rect x="3.2" y="5" width="17.6" height="16" rx="2.4"/><path d="M3.2 10h17.6M8 3v4M16 3v4"/>',
+    timer: '<circle cx="12" cy="13.4" r="7.6"/><path d="M12 9.6v3.8l2.4 2.4M9.2 2.2h5.6"/>',
+    settings: '<path d="M4 7h16M4 12h16M4 17h16"/><circle cx="9" cy="7" r="2.1"/><circle cx="15" cy="12" r="2.1"/><circle cx="8" cy="17" r="2.1"/>',
+    plus: '<path d="M12 5v14M5 12h14"/>',
+    search: '<circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/>',
+    trash: '<path d="M4 7h16M9.5 7V4.5h5V7M6.5 7l1 13h9l1-13"/><path d="M10 11v5M14 11v5"/>',
+    edit: '<path d="M4 20h4l10.5-10.5a2.1 2.1 0 0 0-3-3L5 17z"/><path d="m14 6 4 4"/>',
+    camera: '<path d="M4 8.5h3l1.5-2.5h7L17 8.5h3v11H4z"/><circle cx="12" cy="13.5" r="3.4"/>',
+    check: '<path d="m5 12.5 4.5 4.5L19 7.5"/>',
+    clock: '<circle cx="12" cy="12" r="8"/><path d="M12 7.5V12l3 2"/>',
+    spark: '<path d="M12 3.5 13.8 9l5.5 1.8-5.5 1.9L12 18.5l-1.8-5.8L4.7 10.8 10.2 9z"/>',
+    alert: '<path d="M12 4 3 20h18z"/><path d="M12 10v4M12 17.2v.3"/>',
+    close: '<path d="M6 6l12 12M18 6 6 18"/>',
+    list: '<path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4.2" cy="6" r="1"/><circle cx="4.2" cy="12" r="1"/><circle cx="4.2" cy="18" r="1"/>',
+    target: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="0.9"/>',
+    play: '<path d="M8 5.5v13l10-6.5z"/>',
+    pause: '<path d="M9 5.5v13M15 5.5v13"/>',
+    rotate: '<path d="M5 10a7.5 7.5 0 0 1 12.8-3.3L20 9"/><path d="M20 4v5h-5"/><path d="M19 14a7.5 7.5 0 0 1-12.8 3.3L4 15"/><path d="M4 20v-5h5"/>',
+    download: '<path d="M12 4v11M8 11l4 4 4-4"/><path d="M4.5 19.5h15"/>',
+    upload: '<path d="M12 16V5M8 9l4-4 4 4"/><path d="M4.5 19.5h15"/>'
+  };
+
+  function icon(name, size) {
+    var body = ICONS[name] || ICONS.spark;
+    return '<svg viewBox="0 0 24 24" width="' + (size || 18) + '" height="' + (size || 18) + '" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + body + "</svg>";
+  }
+
+  function esc(value) {
+    return String(value == null ? "" : value).replace(/[&<>"']/g, function (ch) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch];
+    });
+  }
+
+  function pad(n) { return String(n).padStart(2, "0"); }
+  function dateKey(value) {
+    var d = value ? new Date(value) : new Date();
+    if (isNaN(d.getTime())) d = new Date();
+    return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+  }
+  function addDays(key, n) {
+    var d = new Date(key + "T00:00:00");
+    d.setDate(d.getDate() + n);
+    return dateKey(d);
+  }
+  function fmtDate(value) {
+    var d = value ? new Date(value) : new Date();
+    return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日";
+  }
+  function weekdayCN() {
+    return ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"][new Date().getDay()];
+  }
+  function fmtTime(value) {
+    var d = new Date(value);
+    if (isNaN(d.getTime())) return "";
+    return pad(d.getHours()) + ":" + pad(d.getMinutes());
+  }
+  function fmtDateTime(value) {
+    var d = new Date(value);
+    if (isNaN(d.getTime())) return "";
+    return (d.getMonth() + 1) + "月" + d.getDate() + "日 " + pad(d.getHours()) + ":" + pad(d.getMinutes());
+  }
+  function relativeFrom(value) {
+    if (!value) return "";
+    var diff = Date.now() - new Date(value).getTime();
+    var min = Math.floor(diff / 60000);
+    if (min < 1) return "刚刚";
+    if (min < 60) return min + " 分钟前";
+    var hour = Math.floor(min / 60);
+    if (hour < 24) return hour + " 小时前";
+    var day = Math.floor(hour / 24);
+    if (day < 30) return day + " 天前";
+    return (new Date(value).getMonth() + 1) + "月" + new Date(value).getDate() + "日";
+  }
+  function formatClock(seconds) {
+    var total = Math.max(0, Math.round(seconds));
+    return pad(Math.floor(total / 60)) + ":" + pad(total % 60);
+  }
+  function formatDuration(ms) {
+    var total = Math.max(0, Math.floor(ms / 1000));
+    var h = Math.floor(total / 3600);
+    var m = Math.floor((total % 3600) / 60);
+    var s = total % 60;
+    if (h > 0) return h + " 小时 " + m + " 分";
+    if (m > 0) return m + " 分 " + s + " 秒";
+    return s + " 秒";
+  }
+  function uid() {
+    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+    return "id-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 9);
+  }
+  function debounce(fn, wait) {
+    var t = null;
+    return function () {
+      var args = arguments;
+      clearTimeout(t);
+      t = setTimeout(function () { fn.apply(null, args); }, wait || 200);
+    };
+  }
+  function difficultyLabel(v) {
+    for (var i = 0; i < DIFFS.length; i++) if (DIFFS[i].v === Number(v)) return DIFFS[i].l;
+    return "中等";
+  }
+  function priorityOf(v) {
+    for (var i = 0; i < PRIORITIES.length; i++) if (PRIORITIES[i].v === v) return PRIORITIES[i];
+    return PRIORITIES[1];
+  }
+
+  var view = document.getElementById("view");
+  var initial = { mistakes: [], tasks: [], subjects: BASE_SUBJECTS.slice() };
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(LS_KEY);
+      if (!raw) return initial;
+      var p = JSON.parse(raw);
+      return {
+        mistakes: Array.isArray(p.mistakes) ? p.mistakes : [],
+        tasks: Array.isArray(p.tasks) ? p.tasks : [],
+        subjects: Array.isArray(p.subjects) && p.subjects.length ? p.subjects : BASE_SUBJECTS.slice()
+      };
+    } catch (err) {
+      return initial;
+    }
+  }
+
+  var state = load();
+
+  function save() {
+    try {
+      localStorage.setItem(LS_KEY, JSON.stringify(state));
+      return true;
+    } catch (err) {
+      toast("本地存储空间不足，请删除部分照片或先导出备份", "error", 4000);
+      return false;
+    }
+  }
+
+  function toast(message, type, duration) {
+    var root = document.getElementById("toast-root");
+    var node = document.createElement("div");
+    node.className = "toast toast-" + (type || "info");
+    node.textContent = message;
+    root.appendChild(node);
+    requestAnimationFrame(function () { node.classList.add("show"); });
+    setTimeout(function () {
+      node.classList.remove("show");
+      setTimeout(function () { node.remove(); }, 220);
+    }, duration || 2600);
+  }
+
+  function openModal(options) {
+    var root = document.getElementById("modal-root");
+    var backdrop = document.createElement("div");
+    backdrop.className = "modal-backdrop";
+    backdrop.innerHTML = '<div class="modal ' + (options.size || "") + '" role="dialog" aria-modal="true">' +
+      '<div class="modal-head"><span class="modal-title">' + esc(options.title || "") + '</span>' +
+      '<button type="button" class="btn-icon" data-close aria-label="关闭">' + icon("close", 16) + "</button></div>" +
+      '<div class="modal-body"></div>' + (options.footer ? '<div class="modal-foot"></div>' : "") + "</div>";
+    var body = backdrop.querySelector(".modal-body");
+    if (options.content instanceof Node) body.appendChild(options.content);
+    else body.innerHTML = options.content || "";
+    var foot = backdrop.querySelector(".modal-foot");
+    if (foot) {
+      if (options.footer instanceof Node) foot.appendChild(options.footer);
+      else foot.innerHTML = options.footer;
+    }
+    root.appendChild(backdrop);
+    requestAnimationFrame(function () { backdrop.classList.add("open"); });
+    var closed = false;
+    function close() {
+      if (closed) return;
+      closed = true;
+      backdrop.classList.remove("open");
+      setTimeout(function () { backdrop.remove(); }, 190);
+      if (typeof options.onClose === "function") { try { options.onClose(); } catch (e) {} }
+    }
+    backdrop.addEventListener("click", function (e) {
+      if (e.target === backdrop) close();
+      if (e.target.closest("[data-close]")) close();
+    });
+    document.addEventListener("keydown", function onKey(e) {
+      if (e.key === "Escape") { document.removeEventListener("keydown", onKey); close(); }
+    });
+    var first = body.querySelector("input, textarea, select");
+    if (first) setTimeout(function () { first.focus(); }, 80);
+    return { body: body, foot: foot, close: close };
+  }
+
+  function confirmModal(opts) {
+    return new Promise(function (resolve) {
+      var settled = false;
+      function finish(v) { if (!settled) { settled = true; resolve(v); } }
+      var modal = openModal({
+        title: opts.title || "请确认",
+        content: '<p class="detail-text">' + esc(opts.message || "") + "</p>",
+        footer: '<button type="button" class="btn btn-ghost" data-cancel>取消</button>' +
+          '<button type="button" class="btn ' + (opts.danger ? "btn-danger" : "btn-primary") + '" data-ok>' + esc(opts.confirmText || "确定") + "</button>",
+        onClose: function () { finish(false); }
+      });
+      modal.foot.querySelector("[data-cancel]").addEventListener("click", function () { finish(false); modal.close(); });
+      modal.foot.querySelector("[data-ok]").addEventListener("click", function () { finish(true); modal.close(); });
+    });
+  }
+
+  var audioCtx = null;
+  function chime() {
+    try {
+      var Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return;
+      if (!audioCtx) audioCtx = new Ctx();
+      if (audioCtx.state === "suspended") audioCtx.resume();
+      var t0 = audioCtx.currentTime;
+      [0, 0.2, 0.4].forEach(function (offset) {
+        var osc = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        osc.type = "sine";
+        osc.frequency.value = 880;
+        gain.gain.setValueAtTime(0.0001, t0 + offset);
+        gain.gain.exponentialRampToValueAtTime(0.22, t0 + offset + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, t0 + offset + 0.18);
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start(t0 + offset); osc.stop(t0 + offset + 0.22);
+      });
+    } catch (e) {}
+  }
+
+  function showReminder(title, body) {
+    openModal({
+      title: "时间到了",
+      content: '<div class="detail-block"><div class="detail-label">提醒内容</div><div class="detail-text">' +
+        esc(body || title) + '</div></div><p class="settings-desc" style="margin-top:12px">' + fmtTime(new Date()) + "</p>",
+      footer: '<a class="btn btn-ghost" href="#/plans" data-close>查看计划</a><button type="button" class="btn btn-primary" data-close>知道了</button>'
+    });
+  }
+
+  function notify(title, body) {
+    chime();
+    try {
+      if ("Notification" in window && Notification.permission === "granted" && document.visibilityState === "hidden") {
+        new Notification(title, { body: body || "该处理一下了" });
+        return;
+      }
+    } catch (e) {}
+    showReminder(title, body);
+  }
+
+  var fired = {};
+  function checkReminders() {
+    var now = Date.now();
+    state.tasks.forEach(function (task) {
+      if (!task || task.done || !task.datetime) return;
+      var at = new Date(task.datetime).getTime();
+      if (isNaN(at)) return;
+      var key = "t:" + task.id + ":" + task.datetime;
+      if (fired[key]) return;
+      var diff = now - at;
+      if (diff >= 0 && diff < 90000) {
+        fired[key] = true;
+        notify("任务提醒", "「" + task.title + "」" + (task.duration ? "，预计 " + task.duration + " 分钟" : ""));
+      }
+    });
+  }
+
+  function planNextReview(count) {
+    var idx = Math.min(Math.max(0, count), INTERVALS.length - 1);
+    return addDays(dateKey(), INTERVALS[idx]);
+  }
+  function nextReviewState(item) {
+    var count = (Number(item.reviewCount) || 0) + 1;
+    var mastered = count >= INTERVALS.length;
+    return {
+      reviewCount: count,
+      status: mastered ? "mastered" : "reviewing",
+      lastReviewAt: new Date().toISOString(),
+      nextReviewAt: mastered ? null : planNextReview(count)
+    };
+  }
+  function isDue(item) {
+    if (!item || item.status === "mastered") return false;
+    if (!item.nextReviewAt) return true;
+    return item.nextReviewAt <= dateKey();
+  }
+
+  function compressImage(file, maxSize, quality) {
+    return new Promise(function (resolve, reject) {
+      var reader = new FileReader();
+      reader.onload = function () {
+        var img = new Image();
+        img.onload = function () {
+          var w = img.width, h = img.height;
+          var ratio = Math.min(1, (maxSize || 1000) / Math.max(w, h));
+          var canvas = document.createElement("canvas");
+          canvas.width = Math.max(1, Math.round(w * ratio));
+          canvas.height = Math.max(1, Math.round(h * ratio));
+          var ctx = canvas.getContext("2d");
+          ctx.fillStyle = "#fff";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          resolve(canvas.toDataURL("image/jpeg", quality || 0.72));
+        };
+        img.onerror = function () { reject(new Error("图片读取失败")); };
+        img.src = reader.result;
+      };
+      reader.onerror = function () { reject(new Error("图片读取失败")); };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function downloadJSON(data, filename) {
+    var blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json;charset=utf-8" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
+  }
+
+  var OCR_CDN = "https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js";
+  var ocrLoader = null;
+  function loadOCR() {
+    if (window.Tesseract) return Promise.resolve(window.Tesseract);
+    if (ocrLoader) return ocrLoader;
+    ocrLoader = new Promise(function (resolve, reject) {
+      var s = document.createElement("script");
+      s.src = OCR_CDN;
+      s.async = true;
+      s.onload = function () { window.Tesseract ? resolve(window.Tesseract) : reject(new Error("OCR 引擎加载异常")); };
+      s.onerror = function () { reject(new Error("OCR 引擎加载失败，请检查网络")); };
+      document.head.appendChild(s);
+    }).catch(function (err) { ocrLoader = null; throw err; });
+    return ocrLoader;
+  }
+  function recognizeText(dataURL, onProgress) {
+    return loadOCR().then(function (engine) {
+      return engine.createWorker("chi_sim+eng", 1, {
+        logger: function (m) {
+          if (!m) return;
+          onProgress({
+            status: m.status === "recognizing text" ? "正在识别文字" : "正在加载语言模型",
+            progress: Number(m.progress) || 0
+          });
+        }
+      }).then(function (worker) {
+        return worker.recognize(dataURL).then(function (result) {
+          var text = result && result.data && result.data.text ? String(result.data.text) : "";
+          return worker.terminate().then(function () { return text.trim(); }, function () { return text.trim(); });
+        }, function (err) {
+          return worker.terminate().then(function () { throw err; }, function () { throw err; });
+        });
+      });
+    });
+  }
+
+  var NAV = [
+    { id: "home", label: "今日", icon: "home" },
+    { id: "mistakes", label: "错题本", icon: "book" },
+    { id: "plans", label: "计划", icon: "calendar" },
+    { id: "focus", label: "专注", icon: "timer" },
+    { id: "settings", label: "设置", icon: "settings" }
+  ];
+
+  function renderNav() {
+    var html = NAV.map(function (n) {
+      return '<a class="nav-item" data-nav="' + n.id + '" href="#/' + n.id + '">' + icon(n.icon, 18) + "<span>" + n.label + "</span></a>";
+    }).join("");
+    document.getElementById("nav").innerHTML = html;
+    document.getElementById("tabbar").innerHTML = NAV.map(function (n) {
+      return '<a class="tab-item" data-nav="' + n.id + '" href="#/' + n.id + '">' + icon(n.icon, 20) + "<span>" + n.label + "</span></a>";
+    }).join("");
+  }
+
+  function currentRoute() {
+    var raw = location.hash.replace(/^#\/?/, "").split("?")[0];
+    return raw || "home";
+  }
+
+  var cleanup = null;
+  function route() {
+    var id = currentRoute();
+    if (cleanup) { try { cleanup(); } catch (e) {} cleanup = null; }
+    view.onclick = null;
+    var links = document.querySelectorAll("[data-nav]");
+    for (var i = 0; i < links.length; i++) links[i].classList.toggle("active", links[i].getAttribute("data-nav") === id);
+    if (id === "mistakes") viewMistakes();
+    else if (id === "plans") viewPlans();
+    else if (id === "focus") viewFocus();
+    else if (id === "settings") viewSettings();
+    else viewHome();
+    window.scrollTo(0, 0);
+  }
+
+  function taskRow(task) {
+    return '<div class="list-item ' + (task.done ? "done" : "") + '">' +
+      '<button type="button" class="check ' + (task.done ? "done" : "") + '" data-toggle-task="' + esc(task.id) + '" aria-label="切换完成">' + icon("check", 13) + "</button>" +
+      '<div class="li-main"><div class="li-title">' + esc(task.title) + "</div>" +
+      '<div class="li-meta"><span>' + icon("clock", 13) + " " + esc(fmtTime(task.datetime)) + "</span>" +
+      (task.subject ? '<span class="tag">' + esc(task.subject) + "</span>" : "") +
+      (task.duration ? "<span>" + task.duration + " 分钟</span>" : "") + "</div></div></div>";
+  }
+
+  function viewHome() {
+    var today = dateKey();
+    var todayTasks = state.tasks.filter(function (t) { return t.datetime && dateKey(t.datetime) === today; })
+      .sort(function (a, b) { return String(a.datetime).localeCompare(String(b.datetime)); });
+    var dues = state.mistakes.filter(isDue).sort(function (a, b) { return String(a.nextReviewAt || "").localeCompare(String(b.nextReviewAt || "")); });
+    var done = todayTasks.filter(function (t) { return t.done; }).length;
+    var nextTask = state.tasks.filter(function (t) { return !t.done && t.datetime && new Date(t.datetime).getTime() > Date.now(); })
+      .sort(function (a, b) { return String(a.datetime).localeCompare(String(b.datetime)); })[0];
+    var hour = new Date().getHours();
+    var greet = hour < 6 ? "夜深了" : hour < 11 ? "早上好" : hour < 14 ? "中午好" : hour < 18 ? "下午好" : "晚上好";
+    var progress = todayTasks.length ? Math.round(done / todayTasks.length * 100) : 0;
+
+    var taskHtml = todayTasks.length ? todayTasks.map(taskRow).join("") :
+      '<div class="empty"><div class="empty-icon">' + icon("calendar", 24) + '</div><div class="empty-title">今天还没有任务</div><div class="empty-desc">去「计划」里添加今天要完成的事，完成后在这里打钩。</div><a class="btn btn-soft btn-sm" href="#/plans">添加任务</a></div>';
+
+    var reviewHtml = dues.length ? dues.slice(0, 6).map(function (item) {
+      var text = String(item.question || "");
+      var short = text.length > 44 ? text.slice(0, 44) + "…" : text;
+      return '<div class="list-item"><div class="li-main"><div class="li-title">' + esc(short) + "</div>" +
+        '<div class="li-meta"><span class="badge badge-blue">' + esc(item.subject) + "</span>" +
+        '<span class="badge ' + (STATUS_CLASS[item.status] || "badge-gray") + '">' + (STATUS_LABELS[item.status] || "待复习") + "</span>" +
+        "<span>" + (item.reviewCount ? "已复习 " + item.reviewCount + " 次" : "首次复习") + "</span></div></div>" +
+        '<button type="button" class="btn btn-soft btn-sm" data-review="' + esc(item.id) + '">完成复习</button></div>';
+    }).join("") :
+      '<div class="empty"><div class="empty-icon">' + icon("check", 24) + '</div><div class="empty-title">今天没有到期的错题</div><div class="empty-desc">按 1 / 3 / 7 / 15 天的节奏复习，记完就能在这里看到。</div></div>';
+
+    view.innerHTML =
+      '<div class="page-head"><div><h1 class="page-title">' + greet + '，今天也要加油</h1>' +
+      '<p class="page-sub">' + fmtDate(new Date()) + " " + weekdayCN() + ' · <span id="next-remind">正在计算提醒…</span></p></div>' +
+      '<div class="page-actions"><a class="btn btn-ghost" href="#/focus">' + icon("timer", 16) + ' 开始专注</a>' +
+      '<a class="btn btn-primary" href="#/mistakes">' + icon("plus", 16) + " 记一道错题</a></div></div>" +
+
+      '<div class="grid grid-3">' +
+      '<div class="card stat"><div class="stat-top"><span>错题总数</span><span class="stat-icon">' + icon("book", 16) + '</span></div><div class="stat-num">' + state.mistakes.length + '<small>道</small></div><div class="stat-note">已掌握 ' + state.mistakes.filter(function (m) { return m.status === "mastered"; }).length + ' 道</div></div>' +
+      '<div class="card stat"><div class="stat-top"><span>今日待复习</span><span class="stat-icon">' + icon("target", 16) + '</span></div><div class="stat-num">' + dues.length + '<small>道</small></div><div class="stat-note">' + (dues.length ? "按计划复习，效果更好" : "今日复习已清空") + '</div></div>' +
+      '<div class="card stat"><div class="stat-top"><span>今日任务</span><span class="stat-icon">' + icon("check", 16) + '</span></div><div class="stat-num">' + done + '<small>/ ' + todayTasks.length + '</small></div><div class="stat-note">完成度 ' + progress + '%</div></div>' +
+      "</div>" +
+
+      '<div class="grid grid-2" style="margin-top:16px">' +
+      '<section class="card"><div class="card-head"><span class="card-title">' + icon("list", 17) + ' 今日任务</span><a class="card-link" href="#/plans">全部计划</a></div><div class="card-body">' + taskHtml + "</div></section>" +
+      '<section class="card"><div class="card-head"><span class="card-title">' + icon("book", 17) + ' 待复习错题</span><a class="card-link" href="#/mistakes">错题本</a></div><div class="card-body">' + reviewHtml + "</div></section>" +
+      "</div>" +
+
+      '<div class="quick" style="margin-top:16px">' +
+      '<a class="quick-item" href="#/mistakes"><span class="quick-icon">' + icon("camera", 18) + '</span><span><span class="quick-title">拍照记错题</span><span class="quick-desc">识别文字并自动分类</span></span></a>' +
+      '<a class="quick-item" href="#/plans"><span class="quick-icon">' + icon("calendar", 18) + '</span><span><span class="quick-title">制定计划</span><span class="quick-desc">安排今天的任务清单</span></span></a>' +
+      '<a class="quick-item" href="#/focus"><span class="quick-icon">' + icon("timer", 18) + '</span><span><span class="quick-title">专注倒计时</span><span class="quick-desc">25 分钟专注学习</span></span></a>' +
+      "</div>";
+
+    var countdownNode = view.querySelector("#next-remind");
+    function tick() {
+      if (!document.body.contains(countdownNode)) return;
+      if (!nextTask) { countdownNode.textContent = "今天没有待触发的提醒"; return; }
+      var remain = new Date(nextTask.datetime).getTime() - Date.now();
+      countdownNode.textContent = remain > 0
+        ? "距「" + nextTask.title + "」提醒还有 " + formatDuration(remain)
+        : "「" + nextTask.title + "」提醒时间已到";
+    }
+    tick();
+    var timer = setInterval(tick, 1000);
+    cleanup = function () { clearInterval(timer); };
+
+    view.onclick = function (e) {
+      var toggle = e.target.closest("[data-toggle-task]");
+      if (toggle) {
+        var task = null;
+        for (var i = 0; i < state.tasks.length; i++) if (state.tasks[i].id === toggle.getAttribute("data-toggle-task")) task = state.tasks[i];
+        if (!task) return;
+        task.done = !task.done;
+        task.doneAt = task.done ? new Date().toISOString() : null;
+        if (!save()) return;
+        toast(task.done ? "任务完成，继续保持" : "已取消完成", "success");
+        viewHome();
+        return;
+      }
+      var btn = e.target.closest("[data-review]");
+      if (btn) {
+        var item = null;
+        for (var j = 0; j < state.mistakes.length; j++) if (state.mistakes[j].id === btn.getAttribute("data-review")) item = state.mistakes[j];
+        if (!item) return;
+        var patch = nextReviewState(item);
+        for (var k in patch) if (Object.prototype.hasOwnProperty.call(patch, k)) item[k] = patch[k];
+        if (!save()) return;
+        toast(patch.status === "mastered" ? "连续复习完成，已掌握" : "已记录复习，下次按计划提醒", "success");
+        viewHome();
+      }
+    };
+  }
+
+  var mFilter = { q: "", subject: "", status: "" };
+
+  function mistakeCard(item) {
+    var tags = Array.isArray(item.tags) ? item.tags.slice(0, 2) : [];
+    return '<button type="button" class="mistake-card" data-open="' + esc(item.id) + '">' +
+      '<div class="mc-top"><span class="badge badge-blue">' + esc(item.subject || "未分类") + "</span>" +
+      '<span class="badge ' + (STATUS_CLASS[item.status] || "badge-gray") + '">' + (STATUS_LABELS[item.status] || "待复习") + "</span>" +
+      tags.map(function (t) { return '<span class="tag">' + esc(t) + "</span>"; }).join("") + "</div>" +
+      '<div class="mc-question">' + esc(item.question || "（无题目内容）") + "</div>" +
+      '<div class="mc-foot"><span>' + esc(relativeFrom(item.createdAt)) + "录入 · " + esc(difficultyLabel(item.difficulty)) + "</span>" +
+      "<span>" + (item.reviewCount ? "复习 " + item.reviewCount + " 次" : "待首次复习") + "</span></div></button>";
+  }
+
+  function viewMistakes() {
+    var subjectOptions = '<option value="">全部学科</option>' + state.subjects.map(function (s) {
+      return '<option value="' + esc(s) + '"' + (mFilter.subject === s ? " selected" : "") + ">" + esc(s) + "</option>";
+    }).join("");
+    var statusOptions = [["", "全部状态"], ["todo", "待复习"], ["reviewing", "复习中"], ["mastered", "已掌握"]].map(function (pair) {
+      return '<option value="' + pair[0] + '"' + (mFilter.status === pair[0] ? " selected" : "") + ">" + pair[1] + "</option>";
+    }).join("");
+
+    view.innerHTML =
+      '<div class="page-head"><div><h1 class="page-title">错题本</h1>' +
+      '<p class="page-sub">收录、分类，再按节奏复习 · <span id="m-count"></span></p></div>' +
+      '<div class="page-actions"><button type="button" class="btn btn-primary" data-new>' + icon("plus", 16) + " 新增错题</button></div></div>" +
+      '<div class="toolbar"><div class="search">' + icon("search", 16) +
+      '<input class="input" id="m-q" placeholder="搜索题目、答案或解析" value="' + esc(mFilter.q) + '"></div>' +
+      '<select class="select select-sm" id="m-subject">' + subjectOptions + "</select>" +
+      '<select class="select select-sm" id="m-status">' + statusOptions + "</select></div>" +
+      '<div id="m-list"></div>';
+
+    var listNode = view.querySelector("#m-list");
+    var countNode = view.querySelector("#m-count");
+
+    function filtered() {
+      var keyword = mFilter.q.trim().toLowerCase();
+      return state.mistakes.filter(function (item) {
+        if (mFilter.subject && item.subject !== mFilter.subject) return false;
+        if (mFilter.status && item.status !== mFilter.status) return false;
+        if (!keyword) return true;
+        var hay = [item.question, item.answer, item.explanation, item.subject, (item.tags || []).join(" ")].filter(Boolean).join(" ").toLowerCase();
+        return hay.indexOf(keyword) !== -1;
+      }).sort(function (a, b) { return String(b.createdAt || "").localeCompare(String(a.createdAt || "")); });
+    }
+
+    function paint() {
+      var list = filtered();
+      countNode.textContent = "共 " + list.length + " 道";
+      if (!list.length) {
+        listNode.innerHTML = state.mistakes.length
+          ? '<div class="empty"><div class="empty-icon">' + icon("book", 24) + '</div><div class="empty-title">没有匹配的错题</div><div class="empty-desc">换个关键词或清理筛选条件再试试。</div></div>'
+          : '<div class="empty"><div class="empty-icon">' + icon("book", 24) + '</div><div class="empty-title">错题本还是空的</div><div class="empty-desc">点右上角「新增错题」，拍照或手写录入第一道错题。</div></div>';
+        return;
+      }
+      listNode.innerHTML = '<div class="mistake-grid">' + list.map(mistakeCard).join("") + "</div>";
+    }
+    paint();
+
+    var qInput = view.querySelector("#m-q");
+    qInput.addEventListener("input", debounce(function () { mFilter.q = qInput.value; paint(); }, 160));
+    view.querySelector("#m-subject").addEventListener("change", function () { mFilter.subject = this.value; paint(); });
+    view.querySelector("#m-status").addEventListener("change", function () { mFilter.status = this.value; paint(); });
+
+    view.onclick = function (e) {
+      if (e.target.closest("[data-new]")) {
+        openMistakeForm(null);
+        return;
+      }
+      var card = e.target.closest("[data-open]");
+      if (!card) return;
+      var item = null;
+      for (var i = 0; i < state.mistakes.length; i++) if (state.mistakes[i].id === card.getAttribute("data-open")) item = state.mistakes[i];
+      if (item) openMistakeDetail(item);
+    };
+  }
+
+  function openMistakeForm(record) {
+    var isEdit = !!record;
+    var photos = record && Array.isArray(record.images) ? record.images.slice() : [];
+    var subjectOptions = state.subjects.slice();
+    if (record && record.subject && subjectOptions.indexOf(record.subject) === -1) subjectOptions.push(record.subject);
+
+    var content = '<form class="stack" id="mf" novalidate>' +
+      '<div class="form-grid">' +
+      '<label class="field"><span class="field-label">学科</span><select class="select" id="f-subject">' +
+      subjectOptions.map(function (s) { return '<option value="' + esc(s) + '"' + (record && record.subject === s ? " selected" : "") + ">" + esc(s) + "</option>"; }).join("") +
+      "</select></label>" +
+      '<label class="field"><span class="field-label">难度</span><select class="select" id="f-difficulty">' +
+      DIFFS.map(function (d) { return '<option value="' + d.v + '"' + (record && Number(record.difficulty) === d.v ? " selected" : "") + ">" + d.l + "</option>"; }).join("") +
+      "</select></label>" +
+      '<div class="field span-2"><span class="field-label">题目 <span class="req">*</span></span>' +
+      '<textarea class="textarea" id="f-question" placeholder="写下题目，或上传照片后点「识别文字」">' + esc(record ? record.question : "") + "</textarea></div></div>" +
+
+      '<div class="field"><span class="field-label">题目照片</span>' +
+      '<div class="upload" id="upload-zone" role="button" tabindex="0"><input type="file" id="f-file" accept="image/*" multiple hidden>' +
+      "<span>" + icon("camera", 20) + " 点击选择照片，或拖拽到此处</span></div>" +
+      '<div class="thumbs" id="f-thumbs"></div>' +
+      '<div class="ocr-row"><button type="button" class="btn btn-soft btn-sm" id="f-ocr">' + icon("spark", 15) + ' 识别照片文字</button>' +
+      '<span class="ocr-status" id="f-ocr-status"></span></div>' +
+      '<span class="field-hint">照片压缩后保存在本机；OCR 首次使用需联网加载语言模型。</span></div>' +
+
+      '<div class="form-grid">' +
+      '<label class="field span-2"><span class="field-label">答案</span><textarea class="textarea" id="f-answer" placeholder="正确答案（选填）">' + esc(record ? record.answer : "") + "</textarea></label>" +
+      '<label class="field span-2"><span class="field-label">解析</span><textarea class="textarea" id="f-explanation" placeholder="解题思路与关键步骤（选填）">' + esc(record ? record.explanation : "") + "</textarea></label>" +
+      '<label class="field"><span class="field-label">错误原因</span><select class="select" id="f-reason">' +
+      '<option value="">未填写</option>' + REASONS.map(function (r) { return '<option value="' + esc(r) + '"' + (record && record.reason === r ? " selected" : "") + ">" + esc(r) + "</option>"; }).join("") +
+      "</select></label>" +
+      '<label class="field"><span class="field-label">知识点标签</span><input class="input" id="f-tags" placeholder="逗号分隔，如：二次函数, 顶点式" value="' + esc(record && record.tags ? record.tags.join(", ") : "") + '"></label>' +
+      "</div></form>";
+
+    var modal = openModal({
+      title: isEdit ? "编辑错题" : "新增错题",
+      content: content,
+      size: "wide",
+      footer: '<button type="button" class="btn btn-ghost" data-close>取消</button><button type="button" class="btn btn-primary" data-save>' + (isEdit ? "保存修改" : "存入错题本") + "</button>"
+    });
+
+    var body = modal.body;
+    var zone = body.querySelector("#upload-zone");
+    var fileInput = body.querySelector("#f-file");
+    var thumbs = body.querySelector("#f-thumbs");
+    var ocrStatus = body.querySelector("#f-ocr-status");
+    var questionInput = body.querySelector("#f-question");
+
+    function renderThumbs() {
+      thumbs.innerHTML = photos.map(function (url, i) {
+        return '<div class="thumb"><img src="' + url + '" alt="照片 ' + (i + 1) + '"><button type="button" class="thumb-del" data-remove="' + i + '" aria-label="移除照片">×</button></div>';
+      }).join("");
+    }
+    renderThumbs();
+
+    function addFiles(files) {
+      Array.prototype.slice.call(files || []).forEach(function (file) {
+        if (!file.type || file.type.indexOf("image/") !== 0) { toast("只能上传图片文件", "warn"); return; }
+        compressImage(file).then(function (dataURL) {
+          photos.push(dataURL);
+          renderThumbs();
+        }).catch(function () { toast(file.name + " 处理失败", "warn"); });
+      });
+    }
+
+    zone.addEventListener("click", function () { fileInput.click(); });
+    zone.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); fileInput.click(); } });
+    zone.addEventListener("dragover", function (e) { e.preventDefault(); zone.classList.add("drag"); });
+    zone.addEventListener("dragleave", function () { zone.classList.remove("drag"); });
+    zone.addEventListener("drop", function (e) { e.preventDefault(); zone.classList.remove("drag"); addFiles(e.dataTransfer.files); });
+    fileInput.addEventListener("change", function () { addFiles(fileInput.files); fileInput.value = ""; });
+    thumbs.addEventListener("click", function (e) {
+      var btn = e.target.closest("[data-remove]");
+      if (btn) { photos.splice(Number(btn.getAttribute("data-remove")), 1); renderThumbs(); }
+    });
+
+    body.querySelector("#f-ocr").addEventListener("click", function (ev) {
+      var btn = ev.currentTarget;
+      if (!photos.length) { toast("请先选择一张题目照片", "warn"); return; }
+      btn.disabled = true;
+      ocrStatus.classList.remove("warn");
+      ocrStatus.textContent = "正在准备识别…";
+      recognizeText(photos[0], function (p) {
+        ocrStatus.textContent = p.progress ? p.status + " " + Math.round(p.progress * 100) + "%" : p.status;
+      }).then(function (text) {
+        if (!text) {
+          ocrStatus.classList.add("warn");
+          ocrStatus.textContent = "未识别到文字";
+          toast("未识别到文字，请手动输入", "warn");
+          return;
+        }
+        questionInput.value = questionInput.value.trim() ? questionInput.value.trim() + "\n" + text : text;
+        ocrStatus.textContent = "识别完成，可继续修改";
+        toast("已提取文字", "success");
+      }).catch(function (err) {
+        ocrStatus.classList.add("warn");
+        ocrStatus.textContent = "识别失败，请手动输入";
+        toast("文字识别失败（可能是网络或浏览器限制），请手动输入", "warn");
+      }).then(function () { btn.disabled = false; });
+    });
+
+    modal.foot.querySelector("[data-save]").addEventListener("click", function () {
+      var question = questionInput.value.trim();
+      if (!question) { toast("请填写题目内容", "warn"); questionInput.focus(); return; }
+      var tags = body.querySelector("#f-tags").value.split(/[,，、\s]+/).map(function (t) { return t.trim(); }).filter(Boolean).slice(0, 8);
+      var item = {
+        id: record ? record.id : uid(),
+        question: question,
+        answer: body.querySelector("#f-answer").value.trim(),
+        explanation: body.querySelector("#f-explanation").value.trim(),
+        reason: body.querySelector("#f-reason").value,
+        subject: body.querySelector("#f-subject").value,
+        difficulty: Number(body.querySelector("#f-difficulty").value) || 3,
+        tags: tags,
+        images: photos.slice(),
+        status: record ? record.status : "todo",
+        reviewCount: record ? (Number(record.reviewCount) || 0) : 0,
+        lastReviewAt: record ? record.lastReviewAt : null,
+        createdAt: record ? record.createdAt : new Date().toISOString(),
+        nextReviewAt: record ? record.nextReviewAt : planNextReview(0),
+        updatedAt: new Date().toISOString()
+      };
+      var idx = -1;
+      for (var i = 0; i < state.mistakes.length; i++) if (state.mistakes[i].id === item.id) idx = i;
+      if (idx >= 0) state.mistakes[idx] = item; else state.mistakes.push(item);
+      if (!save()) return;
+      modal.close();
+      toast(isEdit ? "已保存修改" : "已存入错题本", "success");
+      viewMistakes();
+    });
+  }
+
+  function openMistakeDetail(item) {
+    var content = '<div class="stack">' +
+      '<div class="row-between wrap"><div class="row wrap">' +
+      '<span class="badge badge-blue">' + esc(item.subject || "未分类") + "</span>" +
+      '<span class="badge ' + (STATUS_CLASS[item.status] || "badge-gray") + '">' + (STATUS_LABELS[item.status] || "待复习") + "</span>" +
+      '<span class="badge badge-gray">' + esc(difficultyLabel(item.difficulty)) + "</span>" +
+      (item.tags || []).map(function (t) { return '<span class="tag">' + esc(t) + "</span>"; }).join("") +
+      '</div><span class="stat-note">' + esc(relativeFrom(item.createdAt)) + "录入</span></div>" +
+      ((item.images || []).length ? '<div class="detail-imgs">' + item.images.map(function (url) { return '<img src="' + url + '" alt="错题照片">'; }).join("") + "</div>" : "") +
+      '<div class="detail-block"><div class="detail-label">题目</div><div class="detail-text">' + esc(item.question || "") + "</div></div>" +
+      (item.answer ? '<div class="detail-block"><div class="detail-label">答案</div><div class="detail-text">' + esc(item.answer) + "</div></div>" : "") +
+      (item.explanation ? '<div class="detail-block"><div class="detail-label">解析</div><div class="detail-text">' + esc(item.explanation) + "</div></div>" : "") +
+      (item.reason ? '<div class="detail-block"><div class="detail-label">错误原因</div><div class="detail-text">' + esc(item.reason) + "</div></div>" : "") +
+      '<div class="stat-line"><span>已复习 ' + (Number(item.reviewCount) || 0) + " 次</span>" +
+      "<span>" + (item.lastReviewAt ? "上次复习 " + esc(fmtDateTime(item.lastReviewAt)) : "尚未复习") + "</span>" +
+      "<span>" + (item.nextReviewAt ? "下次复习 " + esc(item.nextReviewAt) : item.status === "mastered" ? "已掌握，不再提醒" : "待安排") + "</span></div></div>";
+
+    var modal = openModal({
+      title: "错题详情",
+      content: content,
+      size: "wide",
+      footer: '<button type="button" class="btn btn-ghost" data-edit>' + icon("edit", 16) + ' 编辑</button>' +
+        '<button type="button" class="btn btn-danger" data-delete>' + icon("trash", 16) + ' 删除</button>' +
+        '<button type="button" class="btn btn-primary" data-review>完成本次复习</button>'
+    });
+
+    modal.foot.querySelector("[data-review]").addEventListener("click", function () {
+      var patch = nextReviewState(item);
+      for (var k in patch) if (Object.prototype.hasOwnProperty.call(patch, k)) item[k] = patch[k];
+      if (!save()) return;
+      toast("已记录复习进度", "success");
+      modal.close();
+      viewMistakes();
+    });
+
+    modal.foot.querySelector("[data-delete]").addEventListener("click", function () {
+      confirmModal({ title: "删除错题", message: "删除后无法恢复，确定要移除这道错题吗？", confirmText: "删除", danger: true }).then(function (ok) {
+        if (!ok) return;
+        state.mistakes = state.mistakes.filter(function (m) { return m.id !== item.id; });
+        if (!save()) return;
+        toast("已删除", "success");
+        modal.close();
+        viewMistakes();
+      });
+    });
+
+    modal.foot.querySelector("[data-edit]").addEventListener("click", function () {
+      modal.close();
+      openMistakeForm(item);
+    });
+  }
+
+  var pState = { mode: "date", date: dateKey() };
+
+  function planTaskRow(task) {
+    var p = priorityOf(task.priority);
+    return '<div class="list-item ' + (task.done ? "done" : "") + '">' +
+      '<button type="button" class="check ' + (task.done ? "done" : "") + '" data-toggle="' + esc(task.id) + '" aria-label="切换完成">' + icon("check", 13) + "</button>" +
+      '<div class="li-main"><div class="li-title">' + esc(task.title) + "</div>" +
+      '<div class="li-meta"><span>' + esc(fmtDateTime(task.datetime)) + "</span>" +
+      (task.subject ? '<span class="tag">' + esc(task.subject) + "</span>" : "") +
+      (task.duration ? "<span>" + task.duration + " 分钟</span>" : "") +
+      '<span class="badge ' + p.c + '">' + p.l + "</span></div></div>" +
+      '<button type="button" class="btn-icon act" data-edit-task="' + esc(task.id) + '" aria-label="编辑任务">' + icon("edit", 15) + "</button>" +
+      '<button type="button" class="btn-icon" data-delete-task="' + esc(task.id) + '" aria-label="删除任务">' + icon("trash", 15) + "</button></div>";
+  }
+
+  function viewPlans() {
+    view.innerHTML =
+      '<div class="page-head"><div><h1 class="page-title">学习计划</h1><p class="page-sub">把任务拆小，一条一条完成</p></div>' +
+      '<div class="page-actions"><button type="button" class="btn btn-primary" data-new-task>' + icon("plus", 16) + " 添加任务</button></div></div>" +
+      '<section class="card"><div class="card-head"><div class="segmented">' +
+      '<button type="button" class="seg ' + (pState.mode === "date" ? "active" : "") + '" data-mode="date">按日期</button>' +
+      '<button type="button" class="seg ' + (pState.mode === "all" ? "active" : "") + '" data-mode="all">全部任务</button>' +
+      '<button type="button" class="seg ' + (pState.mode === "done" ? "active" : "") + '" data-mode="done">已完成</button></div>' +
+      '<input type="date" class="input select-sm ' + (pState.mode === "date" ? "" : "hidden") + '" id="p-date" value="' + esc(pState.date) + '"></div>' +
+      '<div class="card-body" id="p-list"></div></section>';
+
+    var listNode = view.querySelector("#p-list");
+    var dateInput = view.querySelector("#p-date");
+
+    function visible() {
+      if (pState.mode === "done") {
+        return state.tasks.filter(function (t) { return t.done; }).sort(function (a, b) { return String(b.doneAt || "").localeCompare(String(a.doneAt || "")); });
+      }
+      if (pState.mode === "all") {
+        return state.tasks.slice().sort(function (a, b) {
+          if (a.done !== b.done) return a.done ? 1 : -1;
+          return String(a.datetime || "").localeCompare(String(b.datetime || ""));
+        });
+      }
+      return state.tasks.filter(function (t) { return t.datetime && dateKey(t.datetime) === pState.date; })
+        .sort(function (a, b) {
+          if (a.done !== b.done) return a.done ? 1 : -1;
+          return String(a.datetime).localeCompare(String(b.datetime));
+        });
+    }
+
+    function paint() {
+      var list = visible();
+      if (!list.length) {
+        listNode.innerHTML = '<div class="empty"><div class="empty-icon">' + icon("calendar", 24) + '</div><div class="empty-title">暂无任务</div><div class="empty-desc">点右上角「添加任务」开始安排，完成后会自动出现在这里。</div></div>';
+        return;
+      }
+      listNode.innerHTML = '<div class="list">' + list.map(planTaskRow).join("") + "</div>";
+    }
+    paint();
+
+    dateInput.addEventListener("change", function () { pState.date = dateInput.value || dateKey(); paint(); });
+
+    view.onclick = function (e) {
+      var modeBtn = e.target.closest("[data-mode]");
+      if (modeBtn) { pState.mode = modeBtn.getAttribute("data-mode"); viewPlans(); return; }
+      if (e.target.closest("[data-new-task]")) { openTaskForm(null); return; }
+
+      var toggle = e.target.closest("[data-toggle]");
+      if (toggle) {
+        var task = null;
+        for (var i = 0; i < state.tasks.length; i++) if (state.tasks[i].id === toggle.getAttribute("data-toggle")) task = state.tasks[i];
+        if (!task) return;
+        task.done = !task.done;
+        task.doneAt = task.done ? new Date().toISOString() : null;
+        if (!save()) return;
+        toast(task.done ? "完成一条，继续保持" : "已取消完成", "success");
+        viewPlans();
+        return;
+      }
+
+      var edit = e.target.closest("[data-edit-task]");
+      if (edit) {
+        var t1 = null;
+        for (var j = 0; j < state.tasks.length; j++) if (state.tasks[j].id === edit.getAttribute("data-edit-task")) t1 = state.tasks[j];
+        if (t1) openTaskForm(t1);
+        return;
+      }
+
+      var del = e.target.closest("[data-delete-task]");
+      if (del) {
+        var t2 = null;
+        for (var k = 0; k < state.tasks.length; k++) if (state.tasks[k].id === del.getAttribute("data-delete-task")) t2 = state.tasks[k];
+        if (!t2) return;
+        confirmModal({ title: "删除任务", message: "确定删除「" + t2.title + "」吗？此操作无法撤销。", confirmText: "删除", danger: true }).then(function (ok) {
+          if (!ok) return;
+          state.tasks = state.tasks.filter(function (t) { return t.id !== t2.id; });
+          if (!save()) return;
+          toast("任务已删除", "success");
+          viewPlans();
+        });
+      }
+    };
+  }
+
+  function localDateTimeValue(date) {
+    return date.getFullYear() + "-" + pad(date.getMonth() + 1) + "-" + pad(date.getDate()) + "T" + pad(date.getHours()) + ":" + pad(date.getMinutes());
+  }
+
+  function openTaskForm(record) {
+    var isEdit = !!record;
+    var subjects = state.subjects;
+    var defaultTime = record ? record.datetime : localDateTimeValue(new Date(Date.now() + 30 * 60000));
+    var content = '<form class="stack" id="tf" novalidate>' +
+      '<label class="field"><span class="field-label">任务内容 <span class="req">*</span></span>' +
+      '<input class="input" id="t-title" placeholder="例如：整理数学错题 5 道" value="' + esc(record ? record.title : "") + '"></label>' +
+      '<div class="form-grid">' +
+      '<label class="field"><span class="field-label">提醒时间</span><input class="input" type="datetime-local" id="t-datetime" value="' + esc(defaultTime) + '"></label>' +
+      '<label class="field"><span class="field-label">预计时长（分钟）</span><input class="input" type="number" min="0" max="600" step="5" id="t-duration" value="' + (record && record.duration ? record.duration : 30) + '"></label>' +
+      '<label class="field"><span class="field-label">关联学科</span><select class="select" id="t-subject"><option value="">不关联学科</option>' +
+      subjects.map(function (s) { return '<option value="' + esc(s) + '"' + (record && record.subject === s ? " selected" : "") + ">" + esc(s) + "</option>"; }).join("") +
+      "</select></label>" +
+      '<label class="field"><span class="field-label">优先级</span><select class="select" id="t-priority">' +
+      PRIORITIES.map(function (p) { return '<option value="' + p.v + '"' + (record && record.priority === p.v ? " selected" : "") + ">" + p.l + "</option>"; }).join("") +
+      "</select></label></div>" +
+      '<p class="field-hint">到达提醒时间时页面会弹窗并播放提示音。请保持页面打开。</p></form>';
+
+    var modal = openModal({
+      title: isEdit ? "编辑任务" : "添加任务",
+      content: content,
+      footer: '<button type="button" class="btn btn-ghost" data-close>取消</button><button type="button" class="btn btn-primary" data-save>' + (isEdit ? "保存修改" : "添加任务") + "</button>"
+    });
+    var titleInput = modal.body.querySelector("#t-title");
+
+    modal.foot.querySelector("[data-save]").addEventListener("click", function () {
+      var title = titleInput.value.trim();
+      if (!title) { toast("请填写任务内容", "warn"); titleInput.focus(); return; }
+      var datetime = modal.body.querySelector("#t-datetime").value;
+      if (!datetime) { toast("请选择提醒时间", "warn"); return; }
+      var duration = Number(modal.body.querySelector("#t-duration").value);
+      var item = {
+        id: record ? record.id : uid(),
+        title: title,
+        datetime: datetime,
+        duration: Number.isFinite(duration) && duration > 0 ? Math.min(600, duration) : 0,
+        subject: modal.body.querySelector("#t-subject").value,
+        priority: modal.body.querySelector("#t-priority").value,
+        done: record ? record.done : false,
+        doneAt: record ? record.doneAt : null,
+        createdAt: record ? record.createdAt : new Date().toISOString()
+      };
+      var idx = -1;
+      for (var i = 0; i < state.tasks.length; i++) if (state.tasks[i].id === item.id) idx = i;
+      if (idx >= 0) state.tasks[idx] = item; else state.tasks.push(item);
+      if (!save()) return;
+      modal.close();
+      toast(isEdit ? "任务已更新" : "任务已添加", "success");
+      checkReminders();
+      viewPlans();
+    });
+  }
+
+  var FOCUS_PRESETS = [15, 25, 45];
+  function viewFocus() {
+    var total = 25 * 60, remain = total, running = false, endAt = 0, ticker = null;
+
+    view.innerHTML =
+      '<div class="page-head"><div><h1 class="page-title">专注</h1><p class="page-sub">一次只做一件事，结束会有提示音</p></div></div>' +
+      '<section class="card card-pad" style="text-align:center">' +
+      '<div class="focus-presets">' + FOCUS_PRESETS.map(function (m) {
+        return '<button type="button" class="chip' + (m * 60 === total ? " active" : "") + '" data-min="' + m + '">' + m + " 分钟</button>";
+      }).join("") +
+      '<input class="input" id="custom-min" type="number" min="1" max="180" placeholder="自定义分钟" style="width:128px;height:32px">' +
+      '<button type="button" class="btn btn-soft btn-sm" data-custom>设定</button></div>' +
+      '<div class="ring-wrap" style="margin-top:22px"><div class="ring" id="ring"><div class="ring-inner">' +
+      '<div class="timer-display" id="clock">25:00</div><div class="timer-label" id="timer-label">准备开始</div></div></div></div>' +
+      '<div class="row" style="justify-content:center;margin-top:22px">' +
+      '<button type="button" class="btn btn-primary" id="start-btn">' + icon("play", 16) + ' 开始专注</button>' +
+      '<button type="button" class="btn btn-ghost" id="reset-btn">' + icon("rotate", 16) + ' 重置</button></div>' +
+      '<p class="settings-desc" style="margin-top:16px">建议 25 分钟专注 + 5 分钟休息。请保持页面打开。</p></section>';
+
+    var ring = view.querySelector("#ring");
+    var clock = view.querySelector("#clock");
+    var label = view.querySelector("#timer-label");
+    var startBtn = view.querySelector("#start-btn");
+    var resetBtn = view.querySelector("#reset-btn");
+    var customInput = view.querySelector("#custom-min");
+
+    function paint() {
+      clock.textContent = formatClock(remain);
+      var ratio = total > 0 ? Math.min(1, Math.max(0, (total - remain) / total)) : 0;
+      ring.style.background = "conic-gradient(var(--blue) " + ratio * 360 + "deg, var(--blue-soft) 0deg)";
+      if (running) { startBtn.innerHTML = icon("pause", 16) + " 暂停"; label.textContent = "专注中，加油"; }
+      else if (remain < total) { startBtn.innerHTML = icon("play", 16) + " 继续专注"; label.textContent = remain > 0 ? "已暂停" : "本轮结束"; }
+      else { startBtn.innerHTML = icon("play", 16) + " 开始专注"; label.textContent = "准备开始"; }
+      var chips = view.querySelectorAll("[data-min]");
+      for (var i = 0; i < chips.length; i++) chips[i].classList.toggle("active", Number(chips[i].getAttribute("data-min")) * 60 === total);
+    }
+    function stopTicker() { if (ticker) clearInterval(ticker); ticker = null; }
+    function finish() {
+      running = false;
+      stopTicker();
+      remain = 0;
+      paint();
+      label.textContent = "本轮专注结束";
+      notify("专注结束", "已完成 " + Math.max(1, Math.round(total / 60)) + " 分钟专注，起来活动一下吧");
+    }
+    function tick() {
+      remain = Math.max(0, Math.round((endAt - Date.now()) / 1000));
+      paint();
+      if (remain <= 0 && running) finish();
+    }
+    function start() {
+      if (running) {
+        running = false;
+        stopTicker();
+        remain = Math.max(0, Math.round((endAt - Date.now()) / 1000));
+        paint();
+        return;
+      }
+      if (remain <= 0) remain = total;
+      endAt = Date.now() + remain * 1000;
+      running = true;
+      stopTicker();
+      ticker = setInterval(tick, 250);
+      paint();
+    }
+
+    startBtn.addEventListener("click", start);
+    resetBtn.addEventListener("click", function () { running = false; stopTicker(); remain = total; paint(); });
+    var chips = view.querySelectorAll("[data-min]");
+    for (var ci = 0; ci < chips.length; ci++) {
+      chips[ci].addEventListener("click", function () {
+        if (running) { toast("请先暂停计时再切换时长", "warn"); return; }
+        total = Number(this.getAttribute("data-min")) * 60;
+        remain = total;
+        paint();
+      });
+    }
+    view.querySelector("[data-custom]").addEventListener("click", function () {
+      if (running) { toast("请先暂停计时再切换时长", "warn"); return; }
+      var v = Number(customInput.value);
+      if (!Number.isFinite(v) || v < 1 || v > 180) { toast("请输入 1 到 180 之间的分钟数", "warn"); return; }
+      total = Math.round(v) * 60;
+      remain = total;
+      paint();
+      toast("已设定 " + Math.round(v) + " 分钟", "success");
+    });
+
+    paint();
+    cleanup = function () { stopTicker(); };
+  }
+
+  function notifyInfo() {
+    if (!("Notification" in window)) return { cls: "badge-gray", text: "不支持" };
+    if (Notification.permission === "granted") return { cls: "badge-ok", text: "已开启" };
+    if (Notification.permission === "denied") return { cls: "badge-warn", text: "已被拒绝" };
+    return { cls: "badge-gray", text: "未开启" };
+  }
+
+  function viewSettings() {
+    var info = notifyInfo();
+    view.innerHTML =
+      '<div class="page-head"><div><h1 class="page-title">设置</h1><p class="page-sub">通知、学科与本地数据</p></div></div>' +
+      '<div class="stack"><section class="card">' +
+      '<div class="settings-block"><div class="settings-row"><div><div class="settings-title">系统通知</div>' +
+      '<div class="settings-desc">离线版在 file:// 下可能无法使用系统通知，届时会使用页面内弹窗提醒。</div></div>' +
+      '<div class="row"><span class="badge ' + info.cls + '" id="notify-badge">' + info.text + '</span>' +
+      '<button type="button" class="btn btn-soft btn-sm" data-notify>开启通知</button></div></div></div>' +
+
+      '<div class="settings-block"><div class="settings-title">学科分类</div>' +
+      '<p class="settings-desc">新增学科会出现在错题录入与任务关联中，至少保留一个。</p>' +
+      '<div class="row" style="margin-top:12px"><input class="input" id="new-subject" placeholder="添加学科，例如：信息技术" style="max-width:280px">' +
+      '<button type="button" class="btn btn-soft" data-add-subject>' + icon("plus", 16) + ' 添加</button></div>' +
+      '<div class="row wrap" id="subject-list" style="margin-top:14px"></div></div>' +
+
+      '<div class="settings-block"><div class="settings-title">数据管理</div>' +
+      '<p class="settings-desc">数据保存在本机浏览器（localStorage）。清除浏览器数据会丢失，换设备请导出备份后再导入。</p>' +
+      '<div class="row wrap" style="margin-top:14px">' +
+      '<button type="button" class="btn btn-soft" data-export>' + icon("download", 16) + ' 导出备份</button>' +
+      '<button type="button" class="btn btn-ghost" data-import>' + icon("upload", 16) + ' 导入备份</button>' +
+      '<button type="button" class="btn btn-danger" data-clear>' + icon("trash", 16) + ' 清空全部数据</button>' +
+      '<input type="file" id="import-file" accept="application/json,.json" hidden></div></div>' +
+
+      '<div class="settings-block"><div class="settings-title">关于离线版</div>' +
+      '<p class="settings-desc">蓝白错题本离线版：单文件、无需服务器，双击即可打开。<br>OCR 首次使用需联网加载语言模型；其余功能完全离线。</p>' +
+      '<div class="note" style="margin-top:12px">提示：请把本文件放在固定位置使用。浏览器按文件路径区分本地数据，移动文件后可能读不到之前的数据，届时请用导出备份迁移。</div></div>' +
+      "</section></div>";
+
+    var subjectList = view.querySelector("#subject-list");
+    function renderSubjects() {
+      subjectList.innerHTML = state.subjects.map(function (s) {
+        return '<span class="chip">' + esc(s) + '<button type="button" class="chip-x" data-del-subject="' + esc(s) + '" aria-label="删除学科">×</button></span>';
+      }).join("");
+    }
+    renderSubjects();
+
+    view.querySelector("[data-add-subject]").addEventListener("click", function () {
+      var input = view.querySelector("#new-subject");
+      var name = input.value.trim();
+      if (!name) { toast("学科名称不能为空", "warn"); return; }
+      if (state.subjects.indexOf(name) !== -1) { toast("该学科已存在", "warn"); return; }
+      state.subjects.push(name);
+      if (!save()) return;
+      input.value = "";
+      renderSubjects();
+      toast("学科已添加", "success");
+    });
+
+    view.querySelector("#new-subject").addEventListener("keydown", function (e) {
+      if (e.key === "Enter") view.querySelector("[data-add-subject]").click();
+    });
+
+    view.querySelector("[data-notify]").addEventListener("click", function () {
+      if (!("Notification" in window)) { toast("当前环境不支持系统通知，将使用页面内提醒", "warn"); return; }
+      Notification.requestPermission().then(function (p) {
+        var next = notifyInfo();
+        var badge = view.querySelector("#notify-badge");
+        badge.className = "badge " + next.cls;
+        badge.textContent = next.text;
+        toast(p === "granted" ? "通知权限已开启" : "未获得通知权限，将使用页面内提醒", p === "granted" ? "success" : "warn");
+      }).catch(function () { toast("通知权限申请失败，将使用页面内提醒", "warn"); });
+    });
+
+    view.querySelector("[data-export]").addEventListener("click", function () {
+      downloadJSON({ app: "lanbai-cuoti-offline", version: 1, exportedAt: new Date().toISOString(), state: state }, "错题本备份-" + dateKey() + ".json");
+      toast("已导出备份文件", "success");
+    });
+
+    var importInput = view.querySelector("#import-file");
+    view.querySelector("[data-import]").addEventListener("click", function () { importInput.click(); });
+    importInput.addEventListener("change", function () {
+      var file = importInput.files && importInput.files[0];
+      importInput.value = "";
+      if (!file) return;
+      file.text().then(function (text) {
+        var data;
+        try { data = JSON.parse(text); } catch (e) { throw new Error("文件不是有效的 JSON"); }
+        var payload = data && data.state ? data.state : data;
+        if (!payload || !Array.isArray(payload.mistakes) || !Array.isArray(payload.tasks)) throw new Error("不是本应用的备份文件");
+        return chooseImportMode(payload).then(function (mode) {
+          if (mode === "cancel") return;
+          if (mode === "replace") {
+            state.mistakes = payload.mistakes;
+            state.tasks = payload.tasks;
+            if (Array.isArray(payload.subjects) && payload.subjects.length) state.subjects = payload.subjects;
+          } else {
+            payload.mistakes.forEach(function (m) {
+              var idx = -1;
+              for (var i = 0; i < state.mistakes.length; i++) if (state.mistakes[i].id === m.id) idx = i;
+              if (idx >= 0) state.mistakes[idx] = m; else state.mistakes.push(m);
+            });
+            payload.tasks.forEach(function (t) {
+              var idx = -1;
+              for (var i = 0; i < state.tasks.length; i++) if (state.tasks[i].id === t.id) idx = i;
+              if (idx >= 0) state.tasks[idx] = t; else state.tasks.push(t);
+            });
+          }
+          if (!save()) return;
+          toast("导入完成", "success");
+          viewSettings();
+        });
+      }).catch(function (err) { toast(err.message || "导入失败", "error"); });
+    });
+
+    view.querySelector("[data-clear]").addEventListener("click", function () {
+      confirmModal({ title: "清空全部数据", message: "将删除所有错题、任务与照片，且无法恢复。建议先导出备份。", confirmText: "继续", danger: true }).then(function (ok) {
+        if (!ok) return;
+        return confirmModal({ title: "再次确认", message: "这是最后一步确认，清空后数据无法找回。", confirmText: "确认清空", danger: true });
+      }).then(function (ok2) {
+        if (!ok2) return;
+        state = { mistakes: [], tasks: [], subjects: BASE_SUBJECTS.slice() };
+        try { localStorage.removeItem(LS_KEY); } catch (e) {}
+        save();
+        toast("全部数据已清空", "success");
+        viewSettings();
+      });
+    });
+
+    view.onclick = function (e) {
+      var del = e.target.closest("[data-del-subject]");
+      if (!del) return;
+      var name = del.getAttribute("data-del-subject");
+      if (state.subjects.length <= 1) { toast("至少保留一个学科", "warn"); return; }
+      state.subjects = state.subjects.filter(function (s) { return s !== name; });
+      if (!save()) return;
+      renderSubjects();
+      toast("已删除学科「" + name + "」", "success");
+    };
+  }
+
+  function chooseImportMode(data) {
+    return new Promise(function (resolve) {
+      var settled = false;
+      function finish(v) { if (!settled) { settled = true; resolve(v); } }
+      var modal = openModal({
+        title: "导入备份",
+        content: '<p class="detail-text">备份包含 ' + data.mistakes.length + " 道错题、" + data.tasks.length + " 个任务。<br><br>覆盖导入：清空当前数据后写入备份。<br>合并导入：保留当前数据，相同记录会被备份覆盖。</p>",
+        footer: '<button type="button" class="btn btn-ghost" data-mode="cancel">取消</button>' +
+          '<button type="button" class="btn btn-ghost" data-mode="merge">合并导入</button>' +
+          '<button type="button" class="btn btn-danger" data-mode="replace">覆盖导入</button>',
+        onClose: function () { finish("cancel"); }
+      });
+      var btns = modal.foot.querySelectorAll("[data-mode]");
+      for (var i = 0; i < btns.length; i++) {
+        btns[i].addEventListener("click", function () {
+          finish(this.getAttribute("data-mode"));
+          modal.close();
+        });
+      }
+    });
+  }
+
+  renderNav();
+  window.addEventListener("hashchange", route);
+  route();
+  setInterval(checkReminders, 15000);
+})();
+</script>
+</body>
+</html>
